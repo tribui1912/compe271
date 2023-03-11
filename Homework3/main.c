@@ -14,10 +14,10 @@ int main()
 	int row,col;
 
 	printf("Enter row number: ");
-	scanf("%d",row);
+	scanf("%d",&row);
 
 	printf("Enter column number: ");
-	scanf("%d",col);
+	scanf("%d",&col);
 
 	arrayAddress(row,col,5,array);
 
