@@ -1,25 +1,22 @@
 #include <stdio.h>
 
-int lfsr32(int n)
-{
-	static unsigned int lfsr = 0x55AAFF00;
-	int bit;
-	if (n != 0) lfsr = n;
-	for (int i = 0; i < 32; i++)	{
-		bit = ((lfsr >> 31) ^ (lfsr >> 21) ^ (lfsr >> 1) ^ lfsr) & 1;
-		lfsr = (lfsr >> 1) | (bit << 31);
-	}
-	return lfsr;
+unsigned int lfsr_state = 0x55AAFF00; // initial seed value
+
+unsigned int lfsr32(int n) {
+    if (n != 0) {
+        lfsr_state = n; // save seed value in memory
+    }
+
+    unsigned int bit = ((lfsr_state >> 1) ^ (lfsr_state >> 21) ^ (lfsr_state >> 31) ^ lfsr_state) & 1;
+    lfsr_state = (lfsr_state >> 1) | (bit << 31); // shift and XOR
+
+    return lfsr_state;
 }
 
-int main()
-{
-	int rand;
-	lfsr32(0x55AAFF00);
-	for (int i = 0; i < 10; i++)
-	{
-		rand = lfsr32(0);
-		printf("%u\n", rand);
-	}
-	return 0;
+int main() {
+    int i;
+    for (i = 0; i < 10; i++) {
+        printf("%u\n", lfsr32(0));
+    }
+    return 0;
 }
