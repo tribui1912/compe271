@@ -1,0 +1,66 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <conio.h> // For _getch() on Windows
+#include <time.h>
+
+#define MAP_WIDTH 20
+#define MAP_HEIGHT 10
+#define PLAYER_START_X 0
+#define PLAYER_START_Y 0
+
+void print_map(int map[][MAP_WIDTH], int player_x, int player_y) {
+    for (int i = 0; i < MAP_HEIGHT; ++i) {
+        for (int j = 0; j < MAP_WIDTH; ++j) {
+            if (i == player_y && j == player_x) {
+                printf("P");
+            } else if (map[i][j] != 0) {
+                printf("%d", map[i][j]);
+            } else {
+                printf(".");
+            }
+        }
+        printf("\n");
+    }
+}
+
+int main() {
+    srand(time(NULL));
+    int map[MAP_HEIGHT][MAP_WIDTH] = {0};
+    int player_x = PLAYER_START_X;
+    int player_y = PLAYER_START_Y;
+
+    for (int i = 0; i < 5; ++i) {
+        int x = rand() % MAP_WIDTH;
+        int y = rand() % MAP_HEIGHT;
+        int equation = (rand() % 9) + 1;
+        if (map[y][x] == 0) {
+            map[y][x] = equation;
+        } else {
+            --i;
+        }
+    }
+
+    char input;
+    do {
+        system("cls"); // Clear the console (Windows)
+        //system("clear"); // Clear the console (Linux)
+
+        print_map(map, player_x, player_y);
+
+        input = _getch(); // Windows
+        //input = getchar(); // Linux
+
+        if (input == 'a' && player_x > 0) {
+            --player_x;
+        } else if (input == 'd' && player_x < MAP_WIDTH - 1) {
+            ++player_x;
+        } else if (input == 'w' && player_y > 0) {
+            --player_y;
+        } else if (input == 's' && player_y < MAP_HEIGHT - 1) {
+            ++player_y;
+        }
+
+    } while (input != 'q');
+
+    return 0;
+}
