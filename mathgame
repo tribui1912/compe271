@@ -61,6 +61,7 @@ int main() {
 
     int level = 1;
     int total = 0;
+    int enemies = (MAX_LEVEL * 2 * (MAX_LEVEL * 2)) * 2 - 1; // max total for all 5 levels minus one
 
     initscr();
     raw();
@@ -96,6 +97,7 @@ int main() {
 
     printf("\nYou completed all levels!\n");
     printf("Your total score is: %d\n", total);
+    printf("Total number of enemies: %d\n", enemies);
     printf("Thank you for playing MathGame!\n");
 
     return 0;
