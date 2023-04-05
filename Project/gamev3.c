@@ -47,15 +47,20 @@ void displayEquations(MathEquation equations[NUM_EQUATIONS], int position, int l
     printw("Press 'Enter' to select the equation above your character.\n\n");
 
     for (int i = 0; i < NUM_EQUATIONS; i++) {
+        printw("  #  ");
+    }
+
+    printw("\n");
+    for (int i = 0; i < NUM_EQUATIONS; i++) {
         printw(" %s  ", equations[i].equation);
     }
 
     printw("\n");
     for (int i = 0; i < NUM_EQUATIONS; i++) {
         if (i == position) {
-            printw("   @    ");
+            printw("  @  ");
         } else {
-            printw("        ");
+            printw("     ");
         }
     }
 
