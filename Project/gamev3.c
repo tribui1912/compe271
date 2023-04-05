@@ -5,11 +5,13 @@
 #define NUM_EQUATIONS 3
 #define MAX_LEVEL 5
 
+/// Creating new data structure "MathEquation"
 typedef struct {
-    char equation[16];
-    int answer;
+    char equation[16]; /// storing the equation
+    int answer; /// storing answer of equation
 } MathEquation;
 
+/// Function to generate random equation
 void generateRandomEquation(MathEquation *equation, int max_operand) {
     int num1 = rand() % (max_operand + 1);
     int num2 = rand() % (max_operand + 1);
@@ -37,6 +39,7 @@ void generateRandomEquation(MathEquation *equation, int max_operand) {
     snprintf(equation->equation, sizeof(equation->equation), "%d %c %d", num1, op, num2);
 }
 
+/// Function to display equation and selection
 void displayEquations(MathEquation equations[NUM_EQUATIONS], int position, int level, int total, int enemies) {
     clear();
     printw("Welcome to MathGame!\n");
@@ -78,6 +81,7 @@ void displayEquations(MathEquation equations[NUM_EQUATIONS], int position, int l
     refresh();
 }
 
+/// Main game
 int main() {
     srand(time(NULL));
 
@@ -98,9 +102,13 @@ int main() {
         enemies += max_score;
     }
 
+	/// Using initscr to setup ncurses and clear screen
     initscr();
+	/// Put terminal to raw mode (passing all input directly to app)
     raw();
+	/// Enables keypad (to use left right key)
     keypad(stdscr, TRUE);
+	/// Disable the automatic echoing of keyboard input so it doesn't show what is user input
     noecho();
 
     while (level <= MAX_LEVEL) {
@@ -124,6 +132,7 @@ int main() {
         level++;
     }
 
+    /// Restore terminal to normal state, flushing initscr(),raw(),keypad() and noecho()
     endwin();
 
     printf("\nYou completed all levels!\n");
