@@ -46,14 +46,19 @@ void displayEquations(MathEquation equations[NUM_EQUATIONS], int position, int l
     printw("Use the left and right arrow keys to move your character.\n");
     printw("Press 'Enter' to select the equation above your character.\n\n");
 
-    int enemy_spacing = (enemies + NUM_EQUATIONS - 1) / NUM_EQUATIONS;
-    for (int i = 0; i < enemies; i++) {
-        printw("#");
-        if ((i + 1) % enemy_spacing == 0 && i != enemies - 1) {
-            printw("     ");
+    int enemies_per_column = (enemies + NUM_EQUATIONS - 1) / NUM_EQUATIONS;
+
+    for (int j = 0; j < enemies_per_column; j++) {
+        for (int i = 0; i < NUM_EQUATIONS; i++) {
+            if (j * NUM_EQUATIONS + i < enemies) {
+                printw("#");
+            } else {
+                printw(" ");
+            }
+            printw("%-*s", (int)sizeof(equations[i].equation), "");
         }
+        printw("\n");
     }
-    printw("\n");
 
     for (int i = 0; i < NUM_EQUATIONS; i++) {
         printw(" %s  ", equations[i].equation);
