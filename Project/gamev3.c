@@ -55,7 +55,9 @@ void displayEquations(MathEquation equations[NUM_EQUATIONS], int position, int l
             } else {
                 printw(" ");
             }
-            printw("%-*s", (int)sizeof(equations[i].equation), "");
+            if (i < NUM_EQUATIONS - 1) {
+                printw("  ");
+            }
         }
         printw("\n");
     }
