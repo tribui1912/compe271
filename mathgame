@@ -84,6 +84,7 @@ int main() {
     endwin();
 
     printf("\nYou selected the equation: %s\n", equations[position].equation);
+    printf("The answer is: %d\n", equations[position].answer);
 
     return 0;
 }
