@@ -37,11 +37,12 @@ void generateRandomEquation(MathEquation *equation, int max_operand) {
     snprintf(equation->equation, sizeof(equation->equation), "%d %c %d", num1, op, num2);
 }
 
-void displayEquations(MathEquation equations[NUM_EQUATIONS], int position, int level, int total) {
+void displayEquations(MathEquation equations[NUM_EQUATIONS], int position, int level, int total, int enemies) {
     clear();
     printw("Welcome to MathGame!\n");
     printw("Level: %d\n", level);
-    printw("Total: %d\n\n", total);
+    printw("Total: %d\n", total);
+    printw("Enemies: %d\n\n", enemies);
     printw("Use the left and right arrow keys to choose an equation.\n");
     printw("Press 'Enter' to select the equation.\n\n");
 
@@ -75,7 +76,7 @@ int main() {
         }
         int position = 0;
 
-        displayEquations(equations, position, level, total);
+        displayEquations(equations, position, level, total, enemies);
 
         while (1) {
             int input = getch();
@@ -86,7 +87,7 @@ int main() {
             } else if (input == 10) { // Enter key
                 break;
             }
-            displayEquations(equations, position, level, total);
+            displayEquations(equations, position, level, total, enemies);
         }
 
         total += equations[position].answer;
