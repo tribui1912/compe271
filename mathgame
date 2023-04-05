@@ -62,7 +62,12 @@ int main() {
 
     int level = 1;
     int total = 0;
-    int enemies = (MAX_LEVEL * 2 * (MAX_LEVEL * 2)) * 2 - 1; // max total for all 5 levels minus one
+
+    int max_total = 0;
+    for (int i = 1; i <= MAX_LEVEL; i++) {
+        max_total += i * 2 * i * 2; // max operand for each level multiplied by itself
+    }
+    int enemies = max_total - 1;
 
     initscr();
     raw();
@@ -80,9 +85,9 @@ int main() {
 
         while (1) {
             int input = getch();
-            if (input == KEY_LEFT) {
+            if (input == 75) {
                 position = (position - 1 + NUM_EQUATIONS) % NUM_EQUATIONS;
-            } else if (input == KEY_RIGHT) {
+            } else if (input == 77) {
                 position = (position + 1) % NUM_EQUATIONS;
             } else if (input == 10) { // Enter key
                 break;
