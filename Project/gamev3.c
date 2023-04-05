@@ -69,9 +69,9 @@ void displayEquations(MathEquation equations[NUM_EQUATIONS], int position, int l
     printw("\n");
     for (int i = 0; i < NUM_EQUATIONS; i++) {
         if (i == position) {
-            printw("  @  ");
+            printw("   @   ");
         } else {
-            printw("     ");
+            printw("       ");
         }
     }
 
