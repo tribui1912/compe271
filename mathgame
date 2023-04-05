@@ -3,16 +3,16 @@
 #include <time.h>
 
 #define NUM_EQUATIONS 3
-#define MAX_OPERAND 10
+#define MAX_LEVEL 5
 
 typedef struct {
     char equation[16];
     int answer;
 } MathEquation;
 
-void generateRandomEquation(MathEquation *equation) {
-    int num1 = rand() % (MAX_OPERAND + 1);
-    int num2 = rand() % (MAX_OPERAND + 1);
+void generateRandomEquation(MathEquation *equation, int max_operand) {
+    int num1 = rand() % (max_operand + 1);
+    int num2 = rand() % (max_operand + 1);
     char operators[] = "+-*/";
     char op = operators[rand() % 4];
 
@@ -28,7 +28,7 @@ void generateRandomEquation(MathEquation *equation) {
             break;
         case '/':
             while (num2 == 0) {
-                num2 = rand() % (MAX_OPERAND + 1);
+                num2 = rand() % (max_operand + 1);
             }
             equation->answer = num1 / num2;
             break;
@@ -37,9 +37,10 @@ void generateRandomEquation(MathEquation *equation) {
     snprintf(equation->equation, sizeof(equation->equation), "%d %c %d", num1, op, num2);
 }
 
-void displayEquations(MathEquation equations[NUM_EQUATIONS], int position) {
+void displayEquations(MathEquation equations[NUM_EQUATIONS], int position, int level) {
     clear();
     printw("Welcome to MathGame!\n");
+    printw("Level: %d\n", level);
     printw("Use the left and right arrow keys to choose an equation.\n");
     printw("Press 'Enter' to select the equation.\n");
 
@@ -56,35 +57,49 @@ void displayEquations(MathEquation equations[NUM_EQUATIONS], int position) {
 int main() {
     srand(time(NULL));
 
-    MathEquation equations[NUM_EQUATIONS];
-    for (int i = 0; i < NUM_EQUATIONS; i++) {
-        generateRandomEquation(&equations[i]);
-    }
-    int position = 0;
+    int level = 1;
+    while (level <= MAX_LEVEL) {
+        MathEquation equations[NUM_EQUATIONS];
+        for (int i = 0; i < NUM_EQUATIONS; i++) {
+            generateRandomEquation(&equations[i], level * 2);
+        }
+        int position = 0;
 
-    initscr();
-    raw();
-    keypad(stdscr, TRUE);
-    noecho();
+        initscr();
+        raw();
+        keypad(stdscr, TRUE);
+        noecho();
 
-    displayEquations(equations, position);
+        displayEquations(equations, position, level);
 
-    while (1) {
-        int input = getch();
-        if (input == KEY_LEFT) {
-            position = (position - 1 + NUM_EQUATIONS) % NUM_EQUATIONS;
-        } else if (input == KEY_RIGHT) {
-            position = (position + 1) % NUM_EQUATIONS;
-        } else if (input == 10) { // Enter key
+        while (1) {
+            int input = getch();
+            if (input == KEY_LEFT) {
+                position = (position - 1 + NUM_EQUATIONS) % NUM_EQUATIONS;
+            } else if (input == KEY_RIGHT) {
+                position = (position + 1) % NUM_EQUATIONS;
+            } else if (input == 10) { // Enter key
+                break;
+            }
+            displayEquations(equations, position, level);
+        }
+
+        endwin();
+
+        printf("\nYou completed level %d\n", level);
+        printf("You selected the equation: %s\n", equations[position].equation);
+        printf("The answer is: %d\n", equations[position].answer);
+        printf("\nPress 'Enter' to start the next level, or 'q' to quit the game.\n");
+
+        int input = getchar();
+        if (input == 'q') {
             break;
         }
-        displayEquations(equations, position);
+
+        level++;
     }
 
-    endwin();
-
-    printf("\nYou selected the equation: %s\n", equations[position].equation);
-    printf("The answer is: %d\n", equations[position].answer);
+    printf("\nThank you for playing MathGame!\n");
 
     return 0;
 }
