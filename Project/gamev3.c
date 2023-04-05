@@ -46,11 +46,15 @@ void displayEquations(MathEquation equations[NUM_EQUATIONS], int position, int l
     printw("Use the left and right arrow keys to move your character.\n");
     printw("Press 'Enter' to select the equation above your character.\n\n");
 
-    for (int i = 0; i < NUM_EQUATIONS; i++) {
-        printw("  #  ");
+    int enemy_spacing = (enemies + NUM_EQUATIONS - 1) / NUM_EQUATIONS;
+    for (int i = 0; i < enemies; i++) {
+        printw("#");
+        if ((i + 1) % enemy_spacing == 0 && i != enemies - 1) {
+            printw("     ");
+        }
     }
-
     printw("\n");
+
     for (int i = 0; i < NUM_EQUATIONS; i++) {
         printw(" %s  ", equations[i].equation);
     }
@@ -66,6 +70,7 @@ void displayEquations(MathEquation equations[NUM_EQUATIONS], int position, int l
 
     refresh();
 }
+
 int main() {
     srand(time(NULL));
 
