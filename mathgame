@@ -41,6 +41,7 @@ void displayEquations(MathEquation equations[NUM_EQUATIONS], int position, int l
     clear();
     printw("Welcome to MathGame!\n");
     printw("Level: %d\n", level);
+    printw("Total: %d\n\n", total);
     printw("Use the left and right arrow keys to choose an equation.\n");
     printw("Press 'Enter' to select the equation.\n\n");
 
@@ -52,7 +53,6 @@ void displayEquations(MathEquation equations[NUM_EQUATIONS], int position, int l
         }
     }
 
-    mvprintw(LINES - 1, 0, "Total: %d", total);
     refresh();
 }
 
