@@ -37,12 +37,12 @@ void generateRandomEquation(MathEquation *equation, int max_operand) {
     snprintf(equation->equation, sizeof(equation->equation), "%d %c %d", num1, op, num2);
 }
 
-void displayEquations(MathEquation equations[NUM_EQUATIONS], int position, int level) {
+void displayEquations(MathEquation equations[NUM_EQUATIONS], int position, int level, int total) {
     clear();
     printw("Welcome to MathGame!\n");
     printw("Level: %d\n", level);
     printw("Use the left and right arrow keys to choose an equation.\n");
-    printw("Press 'Enter' to select the equation.\n");
+    printw("Press 'Enter' to select the equation.\n\n");
 
     for (int i = 0; i < NUM_EQUATIONS; i++) {
         if (i == position) {
@@ -51,6 +51,8 @@ void displayEquations(MathEquation equations[NUM_EQUATIONS], int position, int l
             printw("  %s   ", equations[i].equation);
         }
     }
+
+    mvprintw(LINES - 1, 0, "Total: %d", total);
     refresh();
 }
 
@@ -58,6 +60,13 @@ int main() {
     srand(time(NULL));
 
     int level = 1;
+    int total = 0;
+
+    initscr();
+    raw();
+    keypad(stdscr, TRUE);
+    noecho();
+
     while (level <= MAX_LEVEL) {
         MathEquation equations[NUM_EQUATIONS];
         for (int i = 0; i < NUM_EQUATIONS; i++) {
@@ -65,12 +74,7 @@ int main() {
         }
         int position = 0;
 
-        initscr();
-        raw();
-        keypad(stdscr, TRUE);
-        noecho();
-
-        displayEquations(equations, position, level);
+        displayEquations(equations, position, level, total);
 
         while (1) {
             int input = getch();
@@ -81,25 +85,18 @@ int main() {
             } else if (input == 10) { // Enter key
                 break;
             }
-            displayEquations(equations, position, level);
+            displayEquations(equations, position, level, total);
         }
 
-        endwin();
-
-        printf("\nYou completed level %d\n", level);
-        printf("You selected the equation: %s\n", equations[position].equation);
-        printf("The answer is: %d\n", equations[position].answer);
-        printf("\nPress 'Enter' to start the next level, or 'q' to quit the game.\n");
-
-        int input = getchar();
-        if (input == 'q') {
-            break;
-        }
-
+        total += equations[position].answer;
         level++;
     }
 
-    printf("\nThank you for playing MathGame!\n");
+    endwin();
+
+    printf("\nYou completed all levels!\n");
+    printf("Your total score is: %d\n", total);
+    printf("Thank you for playing MathGame!\n");
 
     return 0;
 }
