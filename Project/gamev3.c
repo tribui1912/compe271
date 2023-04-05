@@ -79,38 +79,57 @@ void displayEquations(MathEquation equations[NUM_EQUATIONS], int position, int l
 }
 
 int main() {
+    srand(time(NULL));
+
+    int level = 1;
+    int total = 0;
+
+    int enemies = 0;
+    MathEquation allEquations[MAX_LEVEL][NUM_EQUATIONS];
+
+    for (int l = 0; l < MAX_LEVEL; l++) {
+        int max_score = 0;
+        for (int i = 0; i < NUM_EQUATIONS; i++) {
+            generateRandomEquation(&allEquations[l][i], (l + 1) * 2);
+            if (allEquations[l][i].answer > max_score) {
+                max_score = allEquations[l][i].answer;
+            }
+        }
+        enemies += max_score;
+    }
+
     initscr();
     raw();
     keypad(stdscr, TRUE);
     noecho();
 
-    int total = 0;
-    int enemies = 0;
+    while (level <= MAX_LEVEL) {
+        int position = 0;
 
-    for (int level = 1; level <= NUM_LEVELS; level++) {
-        MathEquation equations[NUM_EQUATIONS];
-        generateEquations(equations);
+        displayEquations(allEquations[level - 1], position, level, total, enemies);
 
-        int largest_answer = findLargestAnswer(equations);
-        enemies += largest_answer;
+        while (1) {
+            int input = getch();
+            if (input == KEY_LEFT) {
+                position = (position - 1 + NUM_EQUATIONS) % NUM_EQUATIONS;
+            } else if (input == KEY_RIGHT) {
+                position = (position + 1) % NUM_EQUATIONS;
+            } else if (input == 10) { // Enter key
+                break;
+            }
+            displayEquations(allEquations[level - 1], position, level, total, enemies);
+        }
 
-        int score = playLevel(equations, level, total, enemies);
-        total += score;
+        total += allEquations[level - 1][position].answer;
+        level++;
     }
 
-    int result = total - enemies;
-
-    clear();
-    if (result == 0) {
-        printw("Congratulations! You've won the game!\n");
-    } else {
-        printw("Sorry, you've lost the game. Better luck next time!\n");
-    }
-
-    printw("Press any key to exit...\n");
-    refresh();
-    getch();
     endwin();
+
+    printf("\nYou completed all levels!\n");
+    printf("Your total score is: %d\n", total);
+    printf("Total number of enemies: %d\n", enemies);
+    printf("Thank you for playing MathGame!\n");
 
     return 0;
 }
