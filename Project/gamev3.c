@@ -51,9 +51,9 @@ void displayEquations(MathEquation equations[NUM_EQUATIONS], int position, int l
     for (int j = 0; j < enemies_per_column; j++) {
         for (int i = 0; i < NUM_EQUATIONS; i++) {
             if (j * NUM_EQUATIONS + i < enemies) {
-                printw("#");
+                printw("###");
             } else {
-                printw(" ");
+                printw("   ");
             }
             if (i < NUM_EQUATIONS - 1) {
                 printw("  ");
