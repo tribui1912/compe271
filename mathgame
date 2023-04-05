@@ -63,11 +63,19 @@ int main() {
     int level = 1;
     int total = 0;
 
-    int max_total = 0;
-    for (int i = 1; i <= MAX_LEVEL; i++) {
-        max_total += i * 2 * i * 2; // max operand for each level multiplied by itself
+    int enemies = 0;
+    MathEquation allEquations[MAX_LEVEL][NUM_EQUATIONS];
+
+    for (int l = 0; l < MAX_LEVEL; l++) {
+        int max_score = 0;
+        for (int i = 0; i < NUM_EQUATIONS; i++) {
+            generateRandomEquation(&allEquations[l][i], (l + 1) * 2);
+            if (allEquations[l][i].answer > max_score) {
+                max_score = allEquations[l][i].answer;
+            }
+        }
+        enemies += max_score;
     }
-    int enemies = max_total - 1;
 
     initscr();
     raw();
@@ -75,27 +83,23 @@ int main() {
     noecho();
 
     while (level <= MAX_LEVEL) {
-        MathEquation equations[NUM_EQUATIONS];
-        for (int i = 0; i < NUM_EQUATIONS; i++) {
-            generateRandomEquation(&equations[i], level * 2);
-        }
         int position = 0;
 
-        displayEquations(equations, position, level, total, enemies);
+        displayEquations(allEquations[level - 1], position, level, total, enemies);
 
         while (1) {
             int input = getch();
-            if (input == 75) {
+            if (input == KEY_LEFT) {
                 position = (position - 1 + NUM_EQUATIONS) % NUM_EQUATIONS;
-            } else if (input == 77) {
+            } else if (input == KEY_RIGHT) {
                 position = (position + 1) % NUM_EQUATIONS;
-            } else if (input == 10) { // Enter key
+            } else if (input == 10) { // Enter key           
                 break;
             }
-            displayEquations(equations, position, level, total, enemies);
+            displayEquations(allEquations[level - 1], position, level, total, enemies);
         }
 
-        total += equations[position].answer;
+        total += allEquations[level - 1][position].answer;
         level++;
     }
 
